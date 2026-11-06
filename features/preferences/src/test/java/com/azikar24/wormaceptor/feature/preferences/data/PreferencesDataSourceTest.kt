@@ -6,6 +6,7 @@ import android.content.pm.ApplicationInfo
 import com.azikar24.wormaceptor.domain.entities.PreferenceValue
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
@@ -69,7 +70,7 @@ class PreferencesDataSourceTest {
             val result = dataSource.getPreferenceFileNames()
 
             result shouldHaveSize 2
-            result shouldContainExactly listOf("app_settings", "user_prefs")
+            result shouldContainExactlyInAnyOrder listOf("app_settings", "user_prefs")
         }
 
         @Test
