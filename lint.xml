@@ -34,11 +34,9 @@
         <ignore path="**/androidTest/**" />
     </issue>
 
-    <!-- Ktor's IntelliJ debug detector references java.lang.management; that path never runs on Android.
-         Netty's TLS trust manager references javax.naming.ldap; the device server serves plain HTTP on localhost -->
+    <!-- Ktor's IntelliJ debug detector references java.lang.management; that path never runs on Android. -->
     <issue id="InvalidPackage">
         <ignore regexp="ktor-utils-jvm" />
-        <ignore regexp="netty-handler" />
     </issue>
 
     <!-- Ignore for build directories -->

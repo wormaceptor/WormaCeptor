@@ -27,10 +27,10 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
+import io.ktor.server.cio.CIO
+import io.ktor.server.cio.CIOApplicationEngine
 import io.ktor.server.engine.EmbeddedServer
 import io.ktor.server.engine.embeddedServer
-import io.ktor.server.netty.Netty
-import io.ktor.server.netty.NettyApplicationEngine
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.response.respond
@@ -56,7 +56,7 @@ internal class WormaCeptorServer(
     private val packageName: String? = null,
     private val configProvider: () -> ServerConfig = { ServerConfig.from(McpHolder.config) },
 ) : McpServerHandle {
-    private var server: EmbeddedServer<NettyApplicationEngine, NettyApplicationEngine.Configuration>? = null
+    private var server: EmbeddedServer<CIOApplicationEngine, CIOApplicationEngine.Configuration>? = null
     private var collectorScope: CoroutineScope? = null
     private val _isRunning = MutableStateFlow(false)
 
@@ -72,7 +72,7 @@ internal class WormaCeptorServer(
         }
         val eventManager = EventStreamManager()
         try {
-            server = embeddedServer(Netty, port = config.port, host = LOCALHOST) {
+            server = embeddedServer(CIO, port = config.port, host = LOCALHOST) {
                 configureServer(config, eventManager)
             }.start(wait = false)
             _isRunning.value = true

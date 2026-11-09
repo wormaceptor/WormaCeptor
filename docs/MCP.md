@@ -131,7 +131,7 @@ With more than one device attached, add `"--device", "<serial>"` to `args`.
 
 ### Device Server (`mcp/device-server`)
 
-An embedded Ktor/Netty HTTP server that runs inside the debug build on port 8999. It exposes REST endpoints backed by WormaCeptor's core engines.
+An embedded Ktor (CIO engine) HTTP server that runs inside the debug build on port 8999. It exposes REST endpoints backed by WormaCeptor's core engines.
 
 - **Auto-starts** via `WormaCeptorServerInitializer`, a ContentProvider that registers the server with `McpHolder` and starts it off the main thread
 - **Debug-only**: included as `debugImplementation`, zero code in release builds
