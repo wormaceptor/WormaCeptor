@@ -61,7 +61,7 @@ public final class com/azikar24/wormaceptor/feature/recomposition/ui/ComposableS
 	public fun <init> ()V
 	public final fun getLambda$-1167017216$WormaCeptor_features_recomposition_release ()Lkotlin/jvm/functions/Function2;
 	public final fun getLambda$1631191255$WormaCeptor_features_recomposition_release ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$39391442$WormaCeptor_features_recomposition_release ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$97373715$WormaCeptor_features_recomposition_release ()Lkotlin/jvm/functions/Function3;
 }
 
 public final class com/azikar24/wormaceptor/feature/recomposition/ui/ComposableSingletons$SummaryRowKt {

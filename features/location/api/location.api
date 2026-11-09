@@ -39,9 +39,9 @@ public final class com/azikar24/wormaceptor/feature/location/ui/ComposableSingle
 	public static final field INSTANCE Lcom/azikar24/wormaceptor/feature/location/ui/ComposableSingletons$LocationScreenKt;
 	public fun <init> ()V
 	public final fun getLambda$-1292062247$WormaCeptor_features_location_release ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$-1373564336$WormaCeptor_features_location_release ()Lkotlin/jvm/functions/Function3;
 	public final fun getLambda$-1414914823$WormaCeptor_features_location_release ()Lkotlin/jvm/functions/Function2;
 	public final fun getLambda$312523550$WormaCeptor_features_location_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$455642001$WormaCeptor_features_location_release ()Lkotlin/jvm/functions/Function3;
 	public final fun getLambda$740410169$WormaCeptor_features_location_release ()Lkotlin/jvm/functions/Function3;
 }
 

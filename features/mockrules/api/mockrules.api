@@ -43,7 +43,7 @@ public final class com/azikar24/wormaceptor/feature/mockrules/ui/ComposableSingl
 	public static final field INSTANCE Lcom/azikar24/wormaceptor/feature/mockrules/ui/ComposableSingletons$MockRulesScreenKt;
 	public fun <init> ()V
 	public final fun getLambda$-1473905115$WormaCeptor_features_mockrules_release ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$-1892190028$WormaCeptor_features_mockrules_release ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$-1882419467$WormaCeptor_features_mockrules_release ()Lkotlin/jvm/functions/Function3;
 	public final fun getLambda$1040894646$WormaCeptor_features_mockrules_release ()Lkotlin/jvm/functions/Function2;
 }
 
