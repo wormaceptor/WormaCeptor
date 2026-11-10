@@ -47,7 +47,7 @@ The device server is already included in the demo app. For your own app, add it 
 <!-- x-release-please-start-version -->
 ```kotlin
 // app/build.gradle.kts
-debugImplementation("com.azikar24.wormaceptor:wormaceptor-mcp-server:3.4.2")
+debugImplementation("com.azikar24.wormaceptor:wormaceptor-mcp-server:3.4.3")
 ```
 <!-- x-release-please-end -->
 

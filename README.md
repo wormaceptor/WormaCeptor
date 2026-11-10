@@ -52,8 +52,8 @@ Add the dependencies in your app's `build.gradle.kts`:
 <!-- x-release-please-start-version -->
 ```kotlin
 dependencies {
-    implementation("com.azikar24.wormaceptor:wormaceptor-client:3.4.2")
-    debugImplementation("com.azikar24.wormaceptor:wormaceptor-persistence:3.4.2")
+    implementation("com.azikar24.wormaceptor:wormaceptor-client:3.4.3")
+    debugImplementation("com.azikar24.wormaceptor:wormaceptor-persistence:3.4.3")
 }
 ```
 <!-- x-release-please-end -->
@@ -141,7 +141,7 @@ Add the MCP device server to your debug build and your AI coding agent can read 
 
 <!-- x-release-please-start-version -->
 ```kotlin
-debugImplementation("com.azikar24.wormaceptor:wormaceptor-mcp-server:3.4.2")
+debugImplementation("com.azikar24.wormaceptor:wormaceptor-mcp-server:3.4.3")
 ```
 <!-- x-release-please-end -->
 
@@ -149,7 +149,7 @@ Register the bridge with your client (needs Node.js 18+, Java 17+ and `adb`; the
 
 <!-- x-release-please-start-version -->
 ```bash
-claude mcp add --transport stdio wormaceptor -- npx -y wormaceptor-mcp@3.4.2
+claude mcp add --transport stdio wormaceptor -- npx -y wormaceptor-mcp@3.4.3
 ```
 <!-- x-release-please-end -->
 
