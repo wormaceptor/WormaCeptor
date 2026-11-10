@@ -33,6 +33,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
@@ -59,6 +60,7 @@ fun PushSimulatorScreen(
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    val resources = LocalResources.current
 
     // Saveable so a grant after rotating during the permission dialog still sends
     var pendingSend by rememberSaveable(stateSaver = PendingSendSaver) { mutableStateOf<PendingSend?>(null) }
@@ -86,7 +88,7 @@ fun PushSimulatorScreen(
                 is PushSimulatorViewEffect.TemplateLoaded -> {
                     scope.launch {
                         snackBarHostState.showSnackbar(
-                            context.getString(R.string.pushsimulator_template_loaded, effect.name),
+                            resources.getString(R.string.pushsimulator_template_loaded, effect.name),
                         )
                     }
                 }
@@ -104,7 +106,7 @@ fun PushSimulatorScreen(
             if (isGranted) {
                 grantedSend = pending
             } else {
-                val message = context.getString(R.string.pushsimulator_notification_permission_denied)
+                val message = resources.getString(R.string.pushsimulator_notification_permission_denied)
                 scope.launch { snackBarHostState.showSnackbar(message) }
             }
         }

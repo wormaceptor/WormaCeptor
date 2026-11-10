@@ -27,8 +27,8 @@ public final class com/azikar24/wormaceptor/feature/threadviolation/ui/ThreadVio
 public final class com/azikar24/wormaceptor/feature/threadviolation/ui/components/ComposableSingletons$ViolationDetailContentKt {
 	public static final field INSTANCE Lcom/azikar24/wormaceptor/feature/threadviolation/ui/components/ComposableSingletons$ViolationDetailContentKt;
 	public fun <init> ()V
-	public final fun getLambda$-1680731703$WormaCeptor_features_threadviolation_release ()Lkotlin/jvm/functions/Function3;
-	public final fun getLambda$216414584$WormaCeptor_features_threadviolation_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$-467815721$WormaCeptor_features_threadviolation_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$1930005288$WormaCeptor_features_threadviolation_release ()Lkotlin/jvm/functions/Function3;
 }
 
 public abstract class com/azikar24/wormaceptor/feature/threadviolation/vm/ThreadViolationViewEffect {

@@ -10,8 +10,10 @@ android {
     }
 }
 
+val libs = the<VersionCatalogsExtension>().named("libs")
+
 dependencies {
-    val bom = platform("androidx.compose:compose-bom:2024.10.01")
+    val bom = platform(libs.findLibrary("androidx-compose-bom").get())
     "implementation"(bom)
     "implementation"("androidx.compose.ui:ui")
     "implementation"("androidx.compose.ui:ui-tooling-preview")

@@ -65,16 +65,16 @@ public final class com/azikar24/wormaceptor/feature/database/ui/ComposableSingle
 	public static final field INSTANCE Lcom/azikar24/wormaceptor/feature/database/ui/ComposableSingletons$QueryScreenKt;
 	public fun <init> ()V
 	public final fun getLambda$-1428419099$WormaCeptor_features_database_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$-1840768374$WormaCeptor_features_database_release ()Lkotlin/jvm/functions/Function2;
 	public final fun getLambda$1052129269$WormaCeptor_features_database_release ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$1169136393$WormaCeptor_features_database_release ()Lkotlin/jvm/functions/Function2;
 }
 
 public final class com/azikar24/wormaceptor/feature/database/ui/ComposableSingletons$TableDataScreenKt {
 	public static final field INSTANCE Lcom/azikar24/wormaceptor/feature/database/ui/ComposableSingletons$TableDataScreenKt;
 	public fun <init> ()V
-	public final fun getLambda$-809061602$WormaCeptor_features_database_release ()Lkotlin/jvm/functions/Function3;
 	public final fun getLambda$1030464052$WormaCeptor_features_database_release ()Lkotlin/jvm/functions/Function2;
 	public final fun getLambda$1476001363$WormaCeptor_features_database_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$1676002109$WormaCeptor_features_database_release ()Lkotlin/jvm/functions/Function3;
 	public final fun getLambda$597079797$WormaCeptor_features_database_release ()Lkotlin/jvm/functions/Function2;
 }
 

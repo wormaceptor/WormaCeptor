@@ -162,7 +162,7 @@ public final class com/azikar24/wormaceptor/feature/viewer/ui/ComposableSingleto
 public final class com/azikar24/wormaceptor/feature/viewer/ui/ComposableSingletons$ToolsTabKt {
 	public static final field INSTANCE Lcom/azikar24/wormaceptor/feature/viewer/ui/ComposableSingletons$ToolsTabKt;
 	public fun <init> ()V
-	public final fun getLambda$163339668$WormaCeptor_features_viewer_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$-270624013$WormaCeptor_features_viewer_release ()Lkotlin/jvm/functions/Function2;
 	public final fun getLambda$249416964$WormaCeptor_features_viewer_release ()Lkotlin/jvm/functions/Function2;
 }
 
