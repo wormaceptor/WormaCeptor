@@ -5,6 +5,26 @@ All notable changes to WormaCeptor will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.3](https://github.com/wormaceptor/WormaCeptor/compare/v3.4.2...v3.4.3) (2026-11-10)
+
+
+### Bug Fixes
+
+* **build:** take convention plugin dependency versions from the catalog ([#75](https://github.com/wormaceptor/WormaCeptor/issues/75)) ([48e9162](https://github.com/wormaceptor/WormaCeptor/commit/48e9162cb9d6e09e433924ba149dd73499e26f35))
+* **mcp:** run the device server on ktor's cio engine ([#76](https://github.com/wormaceptor/WormaCeptor/issues/76)) ([2e7fd5a](https://github.com/wormaceptor/WormaCeptor/commit/2e7fd5a28849476b8b14f6a5f59f06b9990694dd))
+
+
+### Build
+
+* **publishing:** release maven central deployments automatically ([2300da5](https://github.com/wormaceptor/WormaCeptor/commit/2300da514731b551a6a6272a1340f2aa87442f37))
+* **publishing:** release maven central deployments automatically ([d4a495d](https://github.com/wormaceptor/WormaCeptor/commit/d4a495dfdfebffe89a55fcd365d02b5cacbb2ec1))
+
+
+### CI/CD
+
+* **release:** open a website PR that bumps the version ([af2bedf](https://github.com/wormaceptor/WormaCeptor/commit/af2bedff1103df1bbae322f6be06bb4a86d67dd5))
+* **release:** open a website PR that bumps the version ([7d63326](https://github.com/wormaceptor/WormaCeptor/commit/7d633269d1b776cbfddb79d95e5dbbc38b588a49))
+
 ## [3.4.2](https://github.com/wormaceptor/WormaCeptor/compare/v3.4.1...v3.4.2) (2026-10-18)
 
 

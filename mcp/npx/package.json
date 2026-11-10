@@ -1,6 +1,6 @@
 {
   "name": "wormaceptor-mcp",
-  "version": "3.4.2",
+  "version": "3.4.3",
   "mcpName": "com.wormaceptor/wormaceptor",
   "description": "Runs the WormaCeptor MCP bridge so AI agents can inspect a running Android debug app over adb",
   "license": "MIT",
