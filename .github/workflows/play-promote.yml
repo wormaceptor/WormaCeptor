@@ -1,0 +1,56 @@
+name: Promote demo app
+
+on:
+  workflow_dispatch:
+    inputs:
+      to_track:
+        description: Track to promote the internal release to
+        default: production
+        type: choice
+        options: [alpha, beta, production]
+      release_status:
+        description: Release status on the target track
+        default: completed
+        type: choice
+        options: [completed, inProgress, draft]
+      user_fraction:
+        description: Rollout fraction for inProgress (e.g. 0.1)
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  promote:
+    name: Promote internal release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v6
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Decode Play Store service account
+        env:
+          PLAY_SA_JSON: ${{ secrets.PLAY_STORE_SERVICE_ACCOUNT_JSON }}
+        run: |
+          echo "$PLAY_SA_JSON" | base64 -d > "$RUNNER_TEMP/play-sa.json"
+          echo "PLAY_STORE_SERVICE_ACCOUNT_JSON=$RUNNER_TEMP/play-sa.json" >> "$GITHUB_ENV"
+
+      - name: Promote
+        env:
+          TO_TRACK: ${{ inputs.to_track }}
+          RELEASE_STATUS: ${{ inputs.release_status }}
+          USER_FRACTION: ${{ inputs.user_fraction }}
+        run: |
+          ./gradlew :app:promoteReleaseArtifact \
+            --from-track internal \
+            --promote-track "$TO_TRACK" \
+            --release-status "$RELEASE_STATUS" \
+            ${USER_FRACTION:+--user-fraction "$USER_FRACTION"}
