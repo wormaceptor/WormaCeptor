@@ -5,6 +5,13 @@ All notable changes to WormaCeptor will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.4](https://github.com/wormaceptor/WormaCeptor/compare/v3.4.3...v3.4.4) (2026-11-10)
+
+
+### CI/CD
+
+* **release:** add manual workflow to promote the demo app from internal ([#77](https://github.com/wormaceptor/WormaCeptor/issues/77)) ([498cb4f](https://github.com/wormaceptor/WormaCeptor/commit/498cb4f112d817d0d197bcaee8ae6bac0a9115e6))
+
 ## [3.4.3](https://github.com/wormaceptor/WormaCeptor/compare/v3.4.2...v3.4.3) (2026-11-10)
 
 
