@@ -19,7 +19,6 @@ android {
         resources {
             excludes += listOf(
                 "META-INF/INDEX.LIST",
-                "META-INF/io.netty.versions.properties",
                 "META-INF/DEPENDENCIES",
             )
         }
@@ -35,7 +34,7 @@ dependencies {
     implementation(project(":features:filebrowser"))
 
     implementation(libs.ktor.server.core)
-    implementation(libs.ktor.server.netty)
+    implementation(libs.ktor.server.cio)
     implementation(libs.ktor.server.websockets)
     implementation(libs.ktor.server.content.negotiation)
     implementation(libs.ktor.server.status.pages)
