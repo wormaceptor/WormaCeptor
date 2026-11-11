@@ -32,7 +32,7 @@ Initializes WormaCeptor with the specified configuration. Call once during appli
 |-----------|------|---------|-------------|
 | context | Context | required | Application context |
 | logCrashes | Boolean | true | Enable uncaught exception logging |
-| features | Set\<Feature\> | Feature.DEFAULT | Features to enable |
+| features | Set\<Feature\> | Feature.DEFAULT | Features to enable. The leak detector and thread-violation monitor only run when `LEAK_DETECTION` / `THREAD_VIOLATIONS` are included |
 | leakNotifications | Boolean | true | Show notifications for memory leaks |
 
 #### Feature Control
@@ -47,7 +47,8 @@ Initializes WormaCeptor with the specified configuration. Call once during appli
 | Method | Return Type | Description |
 |--------|-------------|-------------|
 | `getLaunchIntent(context: Context)` | Intent | Get intent to launch WormaCeptor UI |
-| `startActivityOnShake(activity: ComponentActivity)` | Unit | Enable shake gesture to open WormaCeptor |
+| `startActivityOnShake(activity: ComponentActivity)` | Unit | Enable shake gesture to open WormaCeptor; does nothing on shake without an implementation module (release) |
+| `enableShakeToOpen(application: Application)` | Unit | Shake-to-open in every activity; call once from `Application.onCreate` |
 | `canShowFloatingButton(context: Context)` | Boolean | Check if overlay permission is granted |
 | `showFloatingButton(context: Context)` | Boolean | Show floating button overlay |
 | `hideFloatingButton(context: Context)` | Unit | Hide floating button overlay |
@@ -381,19 +382,21 @@ WormaCeptorApi.configureMcpServer(
         authToken = "my-secret",
         maxBodySize = 2_097_152L,
         enabled = true,
-        redactSecrets = true
+        redactSecrets = true,
+        allowTcp = false
     )
 )
 ```
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `port` | Int | 8999 | Server port |
+| `port` | Int | 8999 | Device TCP port, used only with `allowTcp` |
 | `enableAuth` | Boolean | false | Enable bearer token authentication |
 | `authToken` | String? | null | Auth token (required when auth enabled) |
 | `maxBodySize` | Long | 1,048,576 | Max transaction body size in bytes |
 | `enabled` | Boolean | true | Whether the server should auto-start |
 | `redactSecrets` | Boolean | true | Replace preference values and file contents under secret-looking keys (token, password, api_key, auth, session, ...) with `[REDACTED]` |
+| `allowTcp` | Boolean | false | Also listen on plain TCP `127.0.0.1:port`. Off: the server only listens on an abstract Unix socket that admits adb, root and the app itself |
 
 ---
 
@@ -415,7 +418,7 @@ They should only be used by WormaCeptor implementation modules, not by host appl
 
 | Version | Changes |
 |---------|---------|
-| Unreleased | `Feature.DATASTORE`: read-only Preferences DataStore inspector; MCP server API (`configureMcpServer`, `startMcpServer`, `stopMcpServer`, `isMcpServerRunning`) |
+| Unreleased | `enableShakeToOpen(application)`; `startActivityOnShake` is a no-op without an implementation module; `features` gates the leak and thread-violation monitors; `ServiceProvider.init(..., features)` overload (default delegates to the existing method); `McpConfig.allowTcp`, server listens on an adb-only Unix socket by default; `Feature.DATASTORE`: read-only Preferences DataStore inspector; MCP server API (`configureMcpServer`, `startMcpServer`, `stopMcpServer`, `isMcpServerRunning`) |
 | 2.3.2 | `ServiceProvider` overloads: `startTransaction(..., startedAtMillis)` and `completeTransaction(..., showNotification, durationMs)`; defaults delegate to the existing methods, so custom providers keep compiling |
 | 2.3.0 | `Feature.MOCK_RULES`, `Feature.COMPOSE_RECOMPOSITION_INSPECTOR`, `Modifier.trackRecomposition` |
 | 2.2.0 | Ktor HTTP client support, MVI pattern adoption (BaseViewModel), shared WormaCeptorTheme, decoupled syntax highlighting |

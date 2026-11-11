@@ -1,8 +1,10 @@
 package com.azikar24.wormaceptor.api
 
 import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -32,6 +34,9 @@ object WormaCeptorApi {
     @Volatile
     private var enabledFeatures: Set<Feature> = Feature.DEFAULT
 
+    @Volatile
+    private var shakeToOpenEnabled = false
+
     /** Configuration for redacting sensitive data from captured network traffic. */
     val redactionConfig = RedactionConfig()
 
@@ -42,7 +47,8 @@ object WormaCeptorApi {
      *
      * @param context Application context
      * @param logCrashes Whether to capture uncaught exceptions
-     * @param features Set of features to enable (defaults to all features)
+     * @param features Set of features to enable (defaults to all features). The leak detector and the
+     *   thread-violation monitor only run when [Feature.LEAK_DETECTION] / [Feature.THREAD_VIOLATIONS] are in it
      * @param leakNotifications Whether to show notifications when memory leaks are detected
      */
     fun init(
@@ -65,7 +71,7 @@ object WormaCeptorApi {
         val instance = implClass?.getDeclaredConstructor()?.newInstance() as? ServiceProvider
         provider = instance ?: NoOpProvider()
 
-        provider?.init(context, logCrashes, leakNotifications)
+        provider?.init(context, logCrashes, leakNotifications, features)
     }
 
     /**
@@ -84,6 +90,7 @@ object WormaCeptorApi {
     /**
      * Registers a shake gesture detector that opens WormaCeptor when the device is shaken.
      * The detector is lifecycle-aware and automatically stops when the activity is destroyed.
+     * Does nothing on shake when no implementation module is installed (release builds).
      *
      * @param activity The activity to attach the shake detector to
      */
@@ -93,11 +100,47 @@ object WormaCeptorApi {
         // or keep it in platform if platform is a shared dependency.
         try {
             ShakeDetector.start(activity) {
-                activity.startActivity(getLaunchIntent(activity))
+                val intent = getLaunchIntent(activity)
+                // No component: no-op provider. Same class: WormaCeptor is already in front.
+                val target = intent.component?.className
+                if (target != null && target != activity.javaClass.name) activity.startActivity(intent)
             }
         } catch (_: Exception) {
             // Shake detector might not be present in No-Op
         }
+    }
+
+    /**
+     * Opens WormaCeptor when the device is shaken in any activity of the app. Call once from
+     * `Application.onCreate`; later calls are ignored. Covers every [ComponentActivity] created afterwards,
+     * and the detector only listens while its activity is resumed, so it follows the foreground activity.
+     *
+     * @param application The host application
+     */
+    fun enableShakeToOpen(application: Application) {
+        if (shakeToOpenEnabled) return
+        shakeToOpenEnabled = true
+        application.registerActivityLifecycleCallbacks(
+            object : Application.ActivityLifecycleCallbacks {
+                override fun onActivityCreated(
+                    activity: Activity,
+                    savedInstanceState: Bundle?,
+                ) {
+                    if (activity is ComponentActivity) startActivityOnShake(activity)
+                }
+
+                override fun onActivityStarted(activity: Activity) = Unit
+                override fun onActivityResumed(activity: Activity) = Unit
+                override fun onActivityPaused(activity: Activity) = Unit
+                override fun onActivityStopped(activity: Activity) = Unit
+                override fun onActivitySaveInstanceState(
+                    activity: Activity,
+                    outState: Bundle,
+                ) = Unit
+
+                override fun onActivityDestroyed(activity: Activity) = Unit
+            },
+        )
     }
 
     /**

@@ -81,6 +81,22 @@ interface ServiceProvider {
     )
 
     /**
+     * Same as the overload without [features], with the features the host enabled, so monitors whose
+     * feature is off don't start. The default implementation ignores [features].
+     *
+     * @param context Application context for accessing resources and services
+     * @param logCrashes Whether to install an uncaught exception handler for crash logging
+     * @param leakNotifications Whether to show notifications when memory leaks are detected
+     * @param features Features the host passed to [WormaCeptorApi.init]
+     */
+    fun init(
+        context: Context,
+        logCrashes: Boolean,
+        leakNotifications: Boolean,
+        features: Set<Feature>,
+    ) = init(context, logCrashes, leakNotifications)
+
+    /**
      * Records the start of an HTTP transaction (request phase).
      *
      * @param url The complete request URL

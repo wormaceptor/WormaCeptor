@@ -1,7 +1,6 @@
 package com.azikar24.wormaceptor.core.engine.di
 
 import android.content.Context
-import com.azikar24.wormaceptor.core.engine.LeakDetectionEngine
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.Koin
 import org.koin.core.KoinApplication
@@ -39,9 +38,6 @@ object WormaCeptorKoin {
     fun init(context: Context) {
         if (koinApp != null) return
         start(context, listOf(engineModule))
-
-        // Eagerly create LeakDetectionEngine to start monitoring immediately
-        getKoin().get<LeakDetectionEngine>()
     }
 
     @Synchronized

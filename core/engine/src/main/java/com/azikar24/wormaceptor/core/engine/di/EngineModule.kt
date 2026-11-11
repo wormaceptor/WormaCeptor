@@ -54,16 +54,9 @@ val engineModule = module {
     single { WebSocketMonitorEngine() }
 
     // Detection engines
-    single {
-        LeakDetectionEngine().apply {
-            start(androidContext().applicationContext as android.app.Application)
-        }
-    }
-    single {
-        ThreadViolationEngine().apply {
-            enable()
-        }
-    }
+    // Started by the service provider, only when the host enabled their feature
+    single { LeakDetectionEngine() }
+    single { ThreadViolationEngine() }
 
     // Network engines
     single { RateLimitEngine() }
