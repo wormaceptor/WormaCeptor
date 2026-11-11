@@ -6,6 +6,7 @@ import com.azikar24.wormaceptor.mcp.bridge.adb.launchFailure
 import com.azikar24.wormaceptor.mcp.bridge.adb.parseThreadtime
 import com.azikar24.wormaceptor.mcp.bridge.config.BridgeConfig
 import com.azikar24.wormaceptor.mcp.protocol.LogEntryDto
+import com.azikar24.wormaceptor.mcp.protocol.mcpSocketName
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -43,6 +44,25 @@ internal class DeviceConnection(
         adbClient.mcpPackages(config.deviceSerial).singleOrNull()
     }?.also { packageName = it }
 
+    /**
+     * Forward targets, best first: the app's adb-only socket, then plain TCP for apps on 3.4.3 or older and
+     * apps that set `McpConfig(allowTcp = true)`.
+     */
+    private suspend fun forwardTargets(): List<String> = listOfNotNull(
+        resolvePackage()?.let { "localabstract:${mcpSocketName(it)}" },
+        "tcp:${config.port}",
+    )
+
+    /** Points the local port at the preferred target, before the app has answered anything. */
+    suspend fun forward(): Boolean = withContext(Dispatchers.IO) {
+        adbClient.forward(config.deviceSerial, config.port, forwardTargets().first())
+    }
+
+    /** Tries each forward target until the server answers through one. */
+    private suspend fun forwardAndCheck(): Boolean = forwardTargets().any { target ->
+        withContext(Dispatchers.IO) { adbClient.forward(config.deviceSerial, config.port, target) } && healthy()
+    }
+
     private suspend fun healthy(): Boolean {
         val health = apiClient.healthCheck() ?: return false
         health.packageName?.let { packageName = it }
@@ -55,7 +75,7 @@ internal class DeviceConnection(
         var attempts = 0
         while (attempts < MAX_RETRY_ATTEMPTS) {
             try {
-                if (healthy()) {
+                if (forwardAndCheck()) {
                     _state.value = ConnectionState.Connected
                     return
                 }
@@ -67,7 +87,8 @@ internal class DeviceConnection(
         }
 
         val errorMsg = "Could not connect to WormaCeptor server on port ${config.port}. " +
-            "Ensure the app is running with mcp-device-server dependency."
+            "Ensure the app is running with mcp-device-server dependency" +
+            if (packageName == null) ", and pass --package if several apps have it." else "."
         _state.value = ConnectionState.Error(errorMsg)
         throw IllegalStateException(errorMsg)
     }
@@ -78,8 +99,7 @@ internal class DeviceConnection(
         for (attempt in 1..maxRetries) {
             _state.value = ConnectionState.Reconnecting(attempt, retryDelay)
             System.err.println("Reconnecting (attempt $attempt/$maxRetries)...")
-            adbClient.forwardPort(config.deviceSerial, config.port, config.port)
-            if (healthy()) {
+            if (forwardAndCheck()) {
                 _state.value = ConnectionState.Connected
                 System.err.println("Reconnected to WormaCeptor server")
                 return true

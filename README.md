@@ -155,7 +155,7 @@ claude mcp add --transport stdio wormaceptor -- npx -y wormaceptor-mcp@3.4.4
 
 No Node? Download `wormaceptor-mcp-bridge.jar` from the [latest release](https://github.com/wormaceptor/WormaCeptor/releases/latest) and run it with `java -jar`.
 
-The server binds to `127.0.0.1` on the device and the bridge reaches it through `adb forward`. Bearer-token auth is available and off by default; read [Security](docs/MCP.md#security) before using it on a shared device. Setup, all 44 tools, and configuration: [docs/MCP.md](docs/MCP.md). Walkthrough: [docs/MCP_TUTORIAL.md](docs/MCP_TUTORIAL.md).
+The server listens on an abstract Unix socket that only adb, root and the app itself can connect to, and the bridge reaches it through `adb forward`. Bearer-token auth is available and off by default; read [Security](docs/MCP.md#security) before using it on a shared device. Setup, all 44 tools, and configuration: [docs/MCP.md](docs/MCP.md). Walkthrough: [docs/MCP_TUTORIAL.md](docs/MCP_TUTORIAL.md).
 
 ---
 

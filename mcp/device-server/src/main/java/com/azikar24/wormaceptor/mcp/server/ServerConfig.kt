@@ -9,6 +9,7 @@ internal data class ServerConfig(
     val maxBodySize: Long = DEFAULT_MAX_BODY_SIZE,
     val enabledCategories: Set<ApiCategory> = ApiCategory.entries.toSet(),
     val redactSecrets: Boolean = true,
+    val allowTcp: Boolean = false,
 ) {
     companion object {
         const val DEFAULT_PORT = 8999
@@ -20,6 +21,7 @@ internal data class ServerConfig(
             authToken = config.authToken,
             maxBodySize = config.maxBodySize,
             redactSecrets = config.redactSecrets,
+            allowTcp = config.allowTcp,
         )
     }
 }

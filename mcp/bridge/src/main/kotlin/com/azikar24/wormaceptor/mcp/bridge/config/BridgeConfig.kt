@@ -54,7 +54,7 @@ internal data class BridgeConfig(
                 |Usage: wormaceptor-bridge [options]
                 |
                 |Options:
-                |  --port <port>     Device server port (default: 8999)
+                |  --port <port>     Local port to forward (default: 8999)
                 |  --device, -s <id> Target device serial (required if multiple devices)
                 |  --adb <path>      Path to adb (default: searches ANDROID_HOME, ANDROID_SDK_ROOT,
                 |                    PATH, then the default Android SDK dir)

@@ -35,14 +35,15 @@ fun main(args: Array<String>) {
         }
         System.err.println("Found device: ${device.serial} (${device.model ?: "unknown"})")
 
-        if (!adbClient.forwardPort(device.serial, config.port, config.port)) {
+        // Pin the discovered serial: adb diagnostics and logcat need it even when --device wasn't given.
+        val connection = DeviceConnection(config.copy(deviceSerial = device.serial), adbClient)
+        if (!connection.forward()) {
             System.err.println("Error: Failed to set up ADB port forwarding")
             kotlin.system.exitProcess(1)
         }
-        System.err.println("Port forwarded: localhost:${config.port} -> device:${config.port}")
-
-        // Pin the discovered serial: adb diagnostics and logcat need it even when --device wasn't given.
-        val connection = DeviceConnection(config.copy(deviceSerial = device.serial), adbClient)
+        System.err.println(
+            "Port forwarded: localhost:${config.port} -> ${connection.packageName ?: "device:${config.port}"}",
+        )
         // Connect in the background: MCP clients time out the initialize handshake (Claude Code: 30 s), and
         // a frozen or not-yet-started app can keep connect() busy longer than that. Tool calls reconnect on demand.
         launch(Dispatchers.IO) {
