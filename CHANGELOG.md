@@ -5,6 +5,18 @@ All notable changes to WormaCeptor will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.5.0](https://github.com/wormaceptor/WormaCeptor/compare/v3.4.4...v3.5.0) (2026-11-12)
+
+
+### Features
+
+* host integration options and adb-only mcp socket ([#80](https://github.com/wormaceptor/WormaCeptor/issues/80)) ([c141bae](https://github.com/wormaceptor/WormaCeptor/commit/c141bae4a30fb63351abc3355782fd7f8eba3574))
+
+
+### Bug Fixes
+
+* **mcp:** avoid api 24 concurrent set in the adb socket proxy ([#82](https://github.com/wormaceptor/WormaCeptor/issues/82)) ([13f3201](https://github.com/wormaceptor/WormaCeptor/commit/13f3201a7d93e4a825f50b25ed1fede995f9319c))
+
 ## [3.4.4](https://github.com/wormaceptor/WormaCeptor/compare/v3.4.3...v3.4.4) (2026-11-10)
 
 
