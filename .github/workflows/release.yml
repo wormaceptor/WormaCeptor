@@ -270,6 +270,7 @@ jobs:
           fi
           version="${RELEASE_TAG#v}"
           branch="chore/version-$version"
+          gh auth setup-git
           gh repo clone wormaceptor/WormaCeptorWeb web -- --depth 1
           cd web
           sed -i -E "s/^export const VERSION = \"[^\"]+\";/export const VERSION = \"$version\";/" src/lib/site.ts
