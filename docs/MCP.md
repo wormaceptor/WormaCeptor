@@ -10,7 +10,7 @@ WormaCeptor exposes a [Model Context Protocol](https://modelcontextprotocol.io/)
                                                         │ port forward
                                              ┌──────────▼──────────┐
                                              │  Device Server      │
-                                             │  (Ktor, port 8999)  │
+                                             │  (adb-only socket)  │
                                              │  inside debug app   │
                                              └─────────────────────┘
 ```
@@ -131,11 +131,12 @@ With more than one device attached, add `"--device", "<serial>"` to `args`.
 
 ### Device Server (`mcp/device-server`)
 
-An embedded Ktor (CIO engine) HTTP server that runs inside the debug build on port 8999. It exposes REST endpoints backed by WormaCeptor's core engines.
+An embedded Ktor (CIO engine) HTTP server that runs inside the debug build. It listens on the abstract Unix socket `wormaceptor_<package>_mcp` and exposes REST endpoints backed by WormaCeptor's core engines.
 
 - **Auto-starts** via `WormaCeptorServerInitializer`, a ContentProvider that registers the server with `McpHolder` and starts it off the main thread
 - **Debug-only**: included as `debugImplementation`, zero code in release builds
-- **Localhost-only**: binds `127.0.0.1` and rejects requests with an `Origin` header or a non-local `Host` (blocks browser and DNS-rebinding access)
+- **adb-only**: the socket accepts only adb (`shell`), `root` and the app's own UID, so other apps on the device can't connect. Ktor itself sits on a random `127.0.0.1` port that answers only the socket's own connections
+- **No browsers**: rejects requests with an `Origin` header or a non-local `Host` (blocks browser and DNS-rebinding access)
 - **Optional auth**: bearer token validation when `McpConfig.enableAuth` is true
 - **Secret redaction**: preference values and file contents under secret-looking keys are masked (`McpConfig.redactSecrets`)
 - **Header redaction** — sensitive headers (`Authorization`, `Cookie`, `X-Api-Key`, etc.) are replaced with `[REDACTED]` in API responses
@@ -147,7 +148,7 @@ An embedded Ktor (CIO engine) HTTP server that runs inside the debug build on po
 A standalone JVM application that translates MCP protocol (JSON-RPC 2.0 on stdin/stdout) into HTTP calls to the device server.
 
 - **Auto-discovers** connected devices via ADB
-- **Port forwarding** — sets up `tcp:8999 → tcp:8999` automatically
+- **Port forwarding**: sets up `tcp:8999 → localabstract:wormaceptor_<package>_mcp` automatically, and falls back to `tcp:8999 → tcp:8999` for apps on 3.4.3 or older and apps with `McpConfig(allowTcp = true)`. The package comes from `--package`, or from adb when exactly one installed app has the MCP server
 - **Reconnection**: at startup it waits ~10s for the server, then starts anyway; a tool call that fails with a connection error re-creates the port forward, retries 4 times with backoff (1s, 2s, 4s), then repeats the call once
 - **Frozen or dead app**: requests time out after 10 s (health checks after 2 s). On a timeout or connection error the bridge asks adb whether the app's process is alive (`pidof`) or frozen (`dumpsys activity processes`, `isFrozen=true`) and says so instead of retrying; the package name comes from `/api/health`, cached after the first successful check
 - **Input validation** — path traversal protection, SQL injection prevention, parameter range checks
@@ -161,7 +162,7 @@ A standalone JVM application that translates MCP protocol (JSON-RPC 2.0 on stdin
 Usage: java -jar bridge.jar [options]
 
 Options:
-  --port <port>      Device server port (default: 8999)
+  --port <port>      Local port to forward (default: 8999)
   --device, -s <id>  Target device serial (required if multiple devices)
   --adb <path>       Path to adb (default: searches ANDROID_HOME, ANDROID_SDK_ROOT,
                      PATH, then the default Android SDK dir)
@@ -382,12 +383,12 @@ The MCP server is designed for **debug builds only**. It should never be include
 
 ### Authentication
 
-**Auth is off by default.** With it off, anything that can reach port 8999 on the device can read every captured request and response body, crash, log line, SharedPreferences value, database row and app file, and can run the action tools. The server binds to `127.0.0.1` and rejects browser requests, so in practice that means:
+**Auth is off by default.** With it off, anything that can reach the server can read every captured request and response body, crash, log line, SharedPreferences value, database row and app file, and can run the action tools. The socket only admits adb, `root` and the app itself, so in practice that means:
 
-- other apps on the same device (any app can connect to `127.0.0.1:8999`)
 - anyone with `adb` access to the device, and any local process on your computer while `adb forward` is active
+- with `McpConfig(allowTcp = true)`, also other apps on the same device (any app can connect to `127.0.0.1:8999`)
 
-That is acceptable on a personal emulator or test device. Turn auth on for shared devices, device farms, or apps that handle real user data:
+A bearer token compiled into the APK doesn't keep other apps out (they can read it from the APK), but it does guard the forwarded port on your computer. Turn auth on for shared machines and device farms:
 
 ```kotlin
 WormaCeptorApi.configureMcpServer(
@@ -430,7 +431,9 @@ The bridge validates tool inputs before forwarding to the device, and the server
 
 ### Network Exposure
 
-The device server binds to `127.0.0.1:8999` on the Android device. It is not exposed on the device's network interfaces; from your computer it is reachable only through ADB port forwarding.
+The device server listens on the abstract Unix socket `wormaceptor_<package>_mcp`, which checks each peer's UID (`shell`, `root` or the app's own) and closes every other connection. Behind it, Ktor binds a random `127.0.0.1` port and answers only TCP peers whose source port belongs to one of the socket's own connections. Nothing listens on the device's network interfaces; from your computer the server is reachable only through ADB port forwarding.
+
+`McpConfig(allowTcp = true)` also binds Ktor to `127.0.0.1:<port>` without that check, for tooling that runs `adb forward tcp:8999 tcp:8999` itself. Every app on the device can then reach it.
 
 ## Configuration
 
@@ -438,12 +441,13 @@ The device server binds to `127.0.0.1:8999` on the Android device. It is not exp
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `port` | Int | 8999 | HTTP server port |
+| `port` | Int | 8999 | Device TCP port, used only with `allowTcp` |
 | `enableAuth` | Boolean | false | Enable bearer token authentication |
 | `authToken` | String? | null | Required token when auth is enabled |
 | `maxBodySize` | Long | 1,048,576 (1 MB) | Max characters of a body returned by the body endpoints |
 | `enabled` | Boolean | true | Auto-start the server; `false` stops a running one |
 | `redactSecrets` | Boolean | true | Mask values under secret-looking keys in `list_preferences` and `read_file` (see Secret Redaction) |
+| `allowTcp` | Boolean | false | Also answer plain TCP on `127.0.0.1:port`, reachable by every app on the device (see Network Exposure) |
 
 ## Module Structure
 
@@ -531,11 +535,11 @@ mcp/
 **Connection refused / timeout**
 - Make sure the app is running in the foreground
 - Check logcat: `adb logcat -s WormaCeptorMCP WormaCeptorServer`
-- Verify port forwarding: `adb forward tcp:8999 tcp:8999 && curl http://localhost:8999/api/health`
+- Verify port forwarding: `adb forward tcp:8999 localabstract:wormaceptor_<package>_mcp && curl http://localhost:8999/api/health`
 
 **Server not starting**
 - Check that `wormaceptor-mcp-server` is included as `debugImplementation`
-- Look for `WormaCeptorServer` in logcat: a port clash or `enableAuth` without a token is logged there
+- Look for `WormaCeptorServer` and `AdbSocketProxy` in logcat: a port clash, a socket that couldn't open, a rejected UID or `enableAuth` without a token is logged there
 - Tools answering "engine not available" mean `WormaCeptorApi.init()` hasn't run yet
 
 **`simulate_location` says mock locations aren't enabled**

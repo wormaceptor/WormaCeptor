@@ -56,6 +56,7 @@ public abstract interface class com/azikar24/wormaceptor/api/ServiceProvider {
 	public abstract fun getTransactionCount ()I
 	public abstract fun getTransactionDetail (Ljava/lang/String;)Lcom/azikar24/wormaceptor/api/TransactionDetailDto;
 	public abstract fun init (Landroid/content/Context;ZZ)V
+	public fun init (Landroid/content/Context;ZZLjava/util/Set;)V
 	public static synthetic fun init$default (Lcom/azikar24/wormaceptor/api/ServiceProvider;Landroid/content/Context;ZZILjava/lang/Object;)V
 	public abstract fun startTransaction (Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;Ljava/io/InputStream;J)Ljava/util/UUID;
 	public fun startTransaction (Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;Ljava/io/InputStream;JJ)Ljava/util/UUID;
@@ -64,6 +65,7 @@ public abstract interface class com/azikar24/wormaceptor/api/ServiceProvider {
 public final class com/azikar24/wormaceptor/api/ServiceProvider$DefaultImpls {
 	public static fun completeTransaction (Lcom/azikar24/wormaceptor/api/ServiceProvider;Ljava/util/UUID;ILjava/lang/String;Ljava/util/Map;Ljava/io/InputStream;JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/Long;)V
 	public static synthetic fun completeTransaction$default (Lcom/azikar24/wormaceptor/api/ServiceProvider;Ljava/util/UUID;ILjava/lang/String;Ljava/util/Map;Ljava/io/InputStream;JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/Long;ILjava/lang/Object;)V
+	public static fun init (Lcom/azikar24/wormaceptor/api/ServiceProvider;Landroid/content/Context;ZZLjava/util/Set;)V
 	public static synthetic fun init$default (Lcom/azikar24/wormaceptor/api/ServiceProvider;Landroid/content/Context;ZZILjava/lang/Object;)V
 	public static fun startTransaction (Lcom/azikar24/wormaceptor/api/ServiceProvider;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;Ljava/io/InputStream;JJ)Ljava/util/UUID;
 }
@@ -126,6 +128,7 @@ public final class com/azikar24/wormaceptor/api/WormaCeptorApi {
 	public static final field INSTANCE Lcom/azikar24/wormaceptor/api/WormaCeptorApi;
 	public final fun canShowFloatingButton (Landroid/content/Context;)Z
 	public final fun configureMcpServer (Lcom/azikar24/wormaceptor/domain/entities/McpConfig;)V
+	public final fun enableShakeToOpen (Landroid/app/Application;)V
 	public final fun getEnabledFeatures ()Ljava/util/Set;
 	public final fun getLaunchIntent (Landroid/content/Context;)Landroid/content/Intent;
 	public final fun getOverlayPermissionIntent (Landroid/content/Context;)Landroid/content/Intent;

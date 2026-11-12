@@ -1,8 +1,10 @@
 package com.azikar24.wormaceptor.api.internal
 
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import com.azikar24.wormaceptor.api.Feature
 import com.azikar24.wormaceptor.api.ServiceProvider
 import com.azikar24.wormaceptor.api.TransactionDetailDto
 import com.azikar24.wormaceptor.core.engine.CaptureEngine
@@ -86,6 +88,13 @@ abstract class BaseServiceProviderImpl : ServiceProvider {
         context: Context,
         logCrashes: Boolean,
         leakNotifications: Boolean,
+    ) = init(context, logCrashes, leakNotifications, Feature.DEFAULT)
+
+    override fun init(
+        context: Context,
+        logCrashes: Boolean,
+        leakNotifications: Boolean,
+        features: Set<Feature>,
     ) {
         if (captureEngine != null) return
         val initStartedAt = System.currentTimeMillis()
@@ -128,11 +137,12 @@ abstract class BaseServiceProviderImpl : ServiceProvider {
             ),
         )
 
-        // Configure leak detection engine with persistence and notifications
-        configureLeakDetection(context, deps.leakRepository, leakNotifications)
-
-        // Configure thread violation engine with notifications
-        configureThreadViolation(context)
+        if (Feature.LEAK_DETECTION in features) {
+            configureLeakDetection(context, deps.leakRepository, leakNotifications)
+        }
+        if (Feature.THREAD_VIOLATIONS in features) {
+            configureThreadViolation(context)
+        }
 
         // Configure WebView monitor engine with persistence
         configureWebViewMonitor(deps.webViewMonitorRepository)
@@ -184,6 +194,7 @@ abstract class BaseServiceProviderImpl : ServiceProvider {
                 repository = leakRepository,
                 onLeakCallback = notificationHelper?.let { helper -> helper::show },
             )
+            leakEngine.start(context.applicationContext as Application)
         } catch (e: RuntimeException) {
             Log.d(TAG, "LeakDetectionEngine not available in Koin", e)
         }
@@ -267,6 +278,7 @@ abstract class BaseServiceProviderImpl : ServiceProvider {
                 hostPackage = context.packageName,
                 onViolationCallback = { violation -> notificationHelper.show(violation) },
             )
+            threadViolationEngine.enable()
         } catch (e: RuntimeException) {
             Log.d(TAG, "ThreadViolationEngine not available in Koin", e)
         }

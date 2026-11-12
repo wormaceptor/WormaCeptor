@@ -69,7 +69,7 @@ You should see:
 WormaCeptor MCP Bridge v3.4.4
 Config: port=8999, device=auto
 Found device: emulator-5554 (sdk_gphone64_arm64)
-Port forwarded: localhost:8999 -> device:8999
+Port forwarded: localhost:8999 -> com.example.app
 Connected to WormaCeptor server
 MCP server ready. Listening for requests on stdin...
 ```
@@ -338,7 +338,7 @@ The AI will:
 
 ### Default (zero config)
 
-Nothing extra needed. The server starts on port 8999 with no auth.
+Nothing extra needed. The server starts on its adb-only socket with no auth; the bridge forwards it to `localhost:8999`.
 
 ```kotlin
 // Application.kt
@@ -352,14 +352,7 @@ java -jar bridge.jar
 
 ### Custom Port
 
-Maybe port 8999 conflicts with something else on your machine.
-
-**App side:**
-
-```kotlin
-WormaCeptorApi.configureMcpServer(McpConfig(port = 9090))
-WormaCeptorApi.init(context = this)
-```
+Maybe port 8999 conflicts with something else on your machine. The port only exists on your computer (the device side is a Unix socket), so only the bridge changes. Set `McpConfig(port = 9090)` too only if the app uses `allowTcp = true`.
 
 **Bridge side:**
 
@@ -382,7 +375,7 @@ java -jar bridge.jar --port 9090
 
 ### With Authentication
 
-Prevent other apps on the device, and other local processes while `adb forward` is active, from reading the debug server.
+Prevent other local processes on your computer from reading the debug server while `adb forward` is active. Other apps on the device are already kept out by the socket's UID check.
 
 **App side:**
 
@@ -569,7 +562,7 @@ The `mcp-device-server` module is included as `debugImplementation`. It physical
 
 | Flag | Short | Default | Description |
 |------|-------|---------|-------------|
-| `--port` | | 8999 | Device server port |
+| `--port` | | 8999 | Local port the bridge forwards on your computer |
 | `--device` | `-s` | auto | Target device serial |
 | `--adb` | | found automatically | Path to adb. Without it the bridge checks `$ANDROID_HOME`, `$ANDROID_SDK_ROOT`, PATH, then the default SDK dir |
 | `--token` | | none | Bearer auth token |
@@ -581,12 +574,13 @@ The `mcp-device-server` module is included as `debugImplementation`. It physical
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `port` | Int | 8999 | Server port on device |
+| `port` | Int | 8999 | Device TCP port, used only with `allowTcp` |
 | `enableAuth` | Boolean | false | Require bearer token |
 | `authToken` | String? | null | The token to require |
 | `maxBodySize` | Long | 1,048,576 | Max body characters in responses |
 | `enabled` | Boolean | true | Auto-start on app launch; `false` stops a running server |
 | `redactSecrets` | Boolean | true | Mask preference and file values under secret-looking keys |
+| `allowTcp` | Boolean | false | Also listen on plain TCP `127.0.0.1:port`, reachable by every app on the device |
 
 ### All 44 MCP Tools
 

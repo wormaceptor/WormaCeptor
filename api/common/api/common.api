@@ -16,6 +16,7 @@ public abstract class com/azikar24/wormaceptor/api/internal/BaseServiceProviderI
 	public fun getTransactionCount ()I
 	public fun getTransactionDetail (Ljava/lang/String;)Lcom/azikar24/wormaceptor/api/TransactionDetailDto;
 	public fun init (Landroid/content/Context;ZZ)V
+	public fun init (Landroid/content/Context;ZZLjava/util/Set;)V
 	protected final fun setCaptureEngine (Lcom/azikar24/wormaceptor/core/engine/CaptureEngine;)V
 	protected final fun setExtensionRegistry (Lcom/azikar24/wormaceptor/core/engine/ExtensionRegistry;)V
 	protected final fun setNotificationHelper (Lcom/azikar24/wormaceptor/api/internal/WormaCeptorNotificationHelper;)V

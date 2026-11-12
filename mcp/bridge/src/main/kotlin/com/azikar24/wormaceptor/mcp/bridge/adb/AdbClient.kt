@@ -44,23 +44,12 @@ internal class AdbClient(private val adbPath: String = "adb") {
         return parseDevices(result.output)
     }
 
-    fun forwardPort(
+    /** `adb forward tcp:<localPort> <remote>`, where [remote] is e.g. `tcp:8999` or `localabstract:<name>`. */
+    fun forward(
         serial: String?,
         localPort: Int,
-        remotePort: Int,
-    ): Boolean {
-        val args = buildList {
-            add(adbPath)
-            if (serial != null) {
-                add("-s")
-                add(serial)
-            }
-            add("forward")
-            add("tcp:$localPort")
-            add("tcp:$remotePort")
-        }
-        return runCommand(args).exitCode == 0
-    }
+        remote: String,
+    ): Boolean = run(serial, "forward", "tcp:$localPort", remote).exitCode == 0
 
     fun removeForward(localPort: Int): Boolean {
         return runCommand(listOf(adbPath, "forward", "--remove", "tcp:$localPort")).exitCode == 0
