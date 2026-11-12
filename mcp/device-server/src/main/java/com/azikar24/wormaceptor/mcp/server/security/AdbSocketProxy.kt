@@ -10,6 +10,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.net.Socket
+import java.util.Collections
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.concurrent.thread
 
@@ -26,8 +27,8 @@ internal class AdbSocketProxy(
     private val targetPort: Int,
 ) : Closeable {
     private val serverSocket = LocalServerSocket(socketName)
-    private val open = ConcurrentHashMap.newKeySet<Closeable>()
-    private val ports = ConcurrentHashMap.newKeySet<Int>()
+    private val open = Collections.newSetFromMap(ConcurrentHashMap<Closeable, Boolean>())
+    private val ports = Collections.newSetFromMap(ConcurrentHashMap<Int, Boolean>())
 
     @Volatile
     private var closed = false
