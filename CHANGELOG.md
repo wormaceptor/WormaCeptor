@@ -5,6 +5,24 @@ All notable changes to WormaCeptor will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.5.1](https://github.com/wormaceptor/WormaCeptor/compare/v3.5.0...v3.5.1) (2026-11-13)
+
+
+### Build
+
+* **deps:** bump androidx.paging:paging-runtime from 3.5.1 to 3.5.3 ([#64](https://github.com/wormaceptor/WormaCeptor/issues/64)) ([d719345](https://github.com/wormaceptor/WormaCeptor/commit/d71934501b8ab1f31bb68a87ab32bb443afbf0e5))
+* **deps:** bump androidx.security:security-crypto ([#69](https://github.com/wormaceptor/WormaCeptor/issues/69)) ([6c1102b](https://github.com/wormaceptor/WormaCeptor/commit/6c1102bf1c3be7a94b35c0b78694c1a1e97c3a6d))
+* **deps:** bump com.google.android.gms:play-services-location ([#62](https://github.com/wormaceptor/WormaCeptor/issues/62)) ([164d1c2](https://github.com/wormaceptor/WormaCeptor/commit/164d1c29d16619da831c00f033183397ce35fea7))
+* **deps:** bump com.osacky.doctor from 0.9.1 to 0.12.1 ([#66](https://github.com/wormaceptor/WormaCeptor/issues/66)) ([7c012d8](https://github.com/wormaceptor/WormaCeptor/commit/7c012d84c205ac3e1aaeb6a7e891582def815fbd))
+* **deps:** bump io.nlopez.compose.rules:detekt from 0.4.28 to 0.6.8 ([#63](https://github.com/wormaceptor/WormaCeptor/issues/63)) ([e89b6d3](https://github.com/wormaceptor/WormaCeptor/commit/e89b6d3ddf84fc19dcaa7d6d1c24a0e5e7c5a42b))
+* **deps:** bump org.jetbrains.kotlinx:kotlinx-coroutines-play-services ([#60](https://github.com/wormaceptor/WormaCeptor/issues/60)) ([7aa3667](https://github.com/wormaceptor/WormaCeptor/commit/7aa3667ef9edfa3c0e28a3a0b1ccdc28565baea7))
+* **deps:** bump org.json:json from 20231013 to 20260814 ([#65](https://github.com/wormaceptor/WormaCeptor/issues/65)) ([14e66b9](https://github.com/wormaceptor/WormaCeptor/commit/14e66b9347ba04a62254c2760bf846d8ffc6c55b))
+
+
+### CI/CD
+
+* **release:** configure git credentials before pushing the website pr ([#83](https://github.com/wormaceptor/WormaCeptor/issues/83)) ([4866e7d](https://github.com/wormaceptor/WormaCeptor/commit/4866e7d79b69951405ac718d28a5600d2ed163c3))
+
 ## [3.5.0](https://github.com/wormaceptor/WormaCeptor/compare/v3.4.4...v3.5.0) (2026-11-12)
 
 

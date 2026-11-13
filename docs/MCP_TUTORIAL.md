@@ -26,11 +26,11 @@ In your app's `build.gradle.kts`:
 ```kotlin
 dependencies {
     // Your existing WormaCeptor dependencies
-    implementation("com.azikar24.wormaceptor:wormaceptor-client:3.5.0")
-    debugImplementation("com.azikar24.wormaceptor:wormaceptor-persistence:3.5.0")
+    implementation("com.azikar24.wormaceptor:wormaceptor-client:3.5.1")
+    debugImplementation("com.azikar24.wormaceptor:wormaceptor-persistence:3.5.1")
 
     // Add the MCP server (debug only, zero code in release)
-    debugImplementation("com.azikar24.wormaceptor:wormaceptor-mcp-server:3.5.0")
+    debugImplementation("com.azikar24.wormaceptor:wormaceptor-mcp-server:3.5.1")
 }
 ```
 <!-- x-release-please-end -->
@@ -66,7 +66,7 @@ You should see:
 
 <!-- x-release-please-start-version -->
 ```
-WormaCeptor MCP Bridge v3.5.0
+WormaCeptor MCP Bridge v3.5.1
 Config: port=8999, device=auto
 Found device: emulator-5554 (sdk_gphone64_arm64)
 Port forwarded: localhost:8999 -> com.example.app
