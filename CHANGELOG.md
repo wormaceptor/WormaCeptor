@@ -5,6 +5,13 @@ All notable changes to WormaCeptor will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.5.1](https://github.com/wormaceptor/WormaCeptor/compare/v3.5.0...v3.5.1) (2026-11-13)
+
+
+### CI/CD
+
+* **release:** configure git credentials before pushing the website pr ([#83](https://github.com/wormaceptor/WormaCeptor/issues/83)) ([4866e7d](https://github.com/wormaceptor/WormaCeptor/commit/4866e7d79b69951405ac718d28a5600d2ed163c3))
+
 ## [3.5.0](https://github.com/wormaceptor/WormaCeptor/compare/v3.4.4...v3.5.0) (2026-11-12)
 
 
